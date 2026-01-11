@@ -1,0 +1,14 @@
+{
+  "runs": [
+    {
+      "name": "logreg_c1",
+      "model": "logreg",
+      "params": {"C": 1.0}
+    },
+    {
+      "name": "logreg_c10",
+      "model": "logreg",
+      "params": {"C": 10.0}
+    }
+  ]
+}

@@ -18,10 +18,18 @@ except FileNotFoundError:
     exit()
 
 parser = argparse.ArgumentParser()
+<<<<<<< HEAD
 parser.add_argument("--clusters", type=int, default=None, help="Number of clusters")
+=======
+parser.add_argument("--clusters", type=int, default=None, help="Number of clusters (optional)")
+parser.add_argument("--output_csv", type=str, default="clustered_output.csv",
+                    help="Path to save clustered dataset")
+parser.add_argument("--output_plot", type=str, default="clusters_plot.png",
+                    help="Path to save cluster visualization")
+>>>>>>> 0f9020fb1de11da36784e92967be359d8f6a7007
 args = parser.parse_args()
 
-expected_columns = ['feature1', 'feature2', 'feature3', 'feature4', 'feature5']
+expected_columns = ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'feature_5']
 for col in expected_columns:
     if col not in df1.columns or col not in df2.columns:
         raise ValueError(f"There is not column: {col}")
@@ -35,7 +43,7 @@ for col in expected_columns:
 
 df = df.dropna(subset=expected_columns)  
 
-features = ['feature1', 'feature2', 'feature3', 'feature4', 'feature5']
+features = ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'feature_5']
 
 X = df[features].copy() 
 
@@ -60,6 +68,8 @@ else:
 kmeans = KMeans(n_clusters=n_clusters, random_state=42)
 cluster_labels = kmeans.fit_predict(X_scaled)
 df['cluster'] = cluster_labels  
+df.to_csv(args.output_csv, index=False)
+print(f"Clustered dataset saved to {args.output_csv}")
 
 pca = PCA(n_components=2)
 X_2d = pca.fit_transform(X_scaled)
@@ -71,4 +81,7 @@ plt.xlabel("PCA 1")
 plt.ylabel("PCA 2")
 plt.title("Clusters visualization")
 plt.legend()
-plt.show()
+plt.tight_layout()
+plt.savefig(args.output_plot, dpi=300)
+print(f"Cluster plot saved to {args.output_plot}")
+plt.close()

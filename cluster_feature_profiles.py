@@ -1,7 +1,12 @@
 import pandas as pd
+import argparse
 
-#Load clustered dataset from Tasks 1–5
-df = pd.read_csv("clustered_output.csv")
+parser = argparse.ArgumentParser()
+parser.add_argument("--input_csv", type=str, default="clustered_output.csv",
+                    help="Clustered dataset path")
+args = parser.parse_args()
+
+df = pd.read_csv(args.input_csv)
 
 cluster_sizes = df['cluster'].value_counts().sort_index()
 print("Cluster sizes:")
