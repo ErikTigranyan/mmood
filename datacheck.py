@@ -18,7 +18,7 @@ except FileNotFoundError:
     exit()
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--clusters", type=int, default=None, help="Number of clusters (optional)")
+parser.add_argument("--clusters", type=int, default=None, help="Number of clusters")
 args = parser.parse_args()
 
 expected_columns = ['feature1', 'feature2', 'feature3', 'feature4', 'feature5']
