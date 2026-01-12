@@ -10,6 +10,10 @@ from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score
 import joblib
 
+from threshold_tuning import tune_threshold_f1
+from export_mistakes import export_fp_fn
+
+
 def load_data(path1, path2):
     df1 = pd.read_csv(path1)
     df2 = pd.read_csv(path2)
@@ -40,6 +44,14 @@ def run_proj(run_cfg, X_train, X_test, y_train, y_test, out):
 
     pipeline.fit(X_train, y_train)
 
+    y_score = pipeline.predict_proba(X_test)[:, 1]
+
+    best_threshold, best_f1 = tune_threshold_f1(
+        y_test,
+        y_score,
+        save_path=out / "threshold.json"
+    )
+    preds = (y_score >= best_threshold).astype(int)
     preds = pipeline.predict(X_test)
     accuracy = accuracy_score(y_test, preds)
 
@@ -53,6 +65,15 @@ def run_proj(run_cfg, X_train, X_test, y_train, y_test, out):
     with open(out / "config.json", "w") as f:
             json.dump(run_cfg, f, indent=2)
 
+    export_fp_fn(
+        X_test,
+        y_test,
+        y_score,
+        threshold=best_threshold,
+        fp_path=out / "false_positives.csv",
+        fn_path=out / "false_negatives.csv"
+    )
+    
     print(f"{run_cfg['name']} | accuracy = {accuracy:.3f}")
 
 def main(args):
