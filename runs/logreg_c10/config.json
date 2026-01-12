@@ -1,0 +1,7 @@
+{
+  "name": "logreg_c10",
+  "model": "logreg",
+  "params": {
+    "C": 10.0
+  }
+}
